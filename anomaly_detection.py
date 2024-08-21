@@ -1,23 +1,22 @@
-from sklearn.ensemble import IsolationForest
-import pandas as pd
-import joblib
-import json
 import sys
+import json
+import pandas as pd
+from sklearn.ensemble import IsolationForest
+import joblib
 
-# Load the trained model
+# Load the model
 model = joblib.load('anomaly_model.pkl')
 
-def predict_anomalies(data):
-    # Assuming 'data' is a pandas DataFrame
-    predictions = model.predict(data)
-    return predictions
+# Read input data from stdin
+input_data = sys.stdin.read()
+data = json.loads(input_data)
 
-# Main entry point
-if __name__ == "__main__":
-    # Read data from standard input
-    input_data = json.loads(sys.stdin.read())
-    df = pd.DataFrame(input_data)
-    anomalies = predict_anomalies(df)
-    
-    # Print results as JSON
-    print(json.dumps(anomalies.tolist()))
+# Convert JSON data to DataFrame
+df = pd.DataFrame(data)
+
+# Predict anomalies
+df['anomaly'] = model.predict(df[['symptom_score']])
+
+# Convert results to JSON and print
+output = df.to_json(orient='records')
+print(output)
