@@ -79,32 +79,38 @@ if ($return_value === 0) {
     <link rel="stylesheet" href="styles.css">
     <style>
         .anomaly { background-color: #fdd; }
+        .anomaly-high-risk { background-color: #fdd; }
+        .anomaly-low-symptom { background-color: #dfd; }
+        .anomaly-unusual-pattern { background-color: #ffd; }
+</style>
+
     </style>
 </head>
 <body>
     <h1>Clinic Dashboard</h1>
     <?php if (isset($anomalies)) : ?>
-        <h2>Anomaly Detection Results:</h2>
-        <table border="1">
-            <tr>
-                <th>ID</th>
-                <th>Patient ID</th>
-                <th>Symptom Score</th>
-                <th>Visit Date</th>
-                <th>Anomaly</th>
+    <h2>Anomaly Detection Results:</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Patient ID</th>
+            <th>Symptom Score</th>
+            <th>Visit Date</th>
+            <th>Anomaly Type</th>
+        </tr>
+        <?php foreach ($anomalies as $record) : ?>
+            <tr class="<?= $record['anomaly'] != 'Normal' ? 'anomaly' : '' ?>">
+                <td><?= htmlspecialchars($record['id']) ?></td>
+                <td><?= htmlspecialchars($record['patient_id']) ?></td>
+                <td><?= htmlspecialchars($record['symptom_score']) ?></td>
+                <td><?= htmlspecialchars($record['visit_date']) ?></td>
+                <td><?= htmlspecialchars($record['anomaly']) ?></td>
             </tr>
-            <?php foreach ($anomalies as $record) : ?>
-                <tr class="<?= $record['anomaly'] == -1 ? 'anomaly' : '' ?>">
-                    <td><?= htmlspecialchars($record['id']) ?></td>
-                    <td><?= htmlspecialchars($record['patient_id']) ?></td>
-                    <td><?= htmlspecialchars($record['symptom_score']) ?></td>
-                    <td><?= htmlspecialchars($record['visit_date']) ?></td>
-                    <td><?= $record['anomaly'] == -1 ? 'Anomaly' : 'Normal' ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php else : ?>
-        <p>No anomaly data available.</p>
-    <?php endif; ?>
+        <?php endforeach; ?>
+    </table>
+<?php else : ?>
+    <p>No anomaly data available.</p>
+<?php endif; ?>
+
 </body>
 </html>
