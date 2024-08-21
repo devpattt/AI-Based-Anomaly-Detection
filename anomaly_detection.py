@@ -3,8 +3,8 @@ from sklearn.ensemble import IsolationForest
 
 # Example function to detect anomalies
 def detect_anomalies(data):
-    # Convert JSON to a DataFrame or NumPy array
-    symptom_scores = [record['symptom_score'] for record in data]
+    # Convert JSON to a list of symptom scores, ensuring they are numbers
+    symptom_scores = [float(record['symptom_score']) for record in data]
     
     # Example: Using Isolation Forest to detect anomalies
     model = IsolationForest(contamination=0.1)
@@ -14,11 +14,11 @@ def detect_anomalies(data):
     
     # Annotate each record with anomaly type
     for i, record in enumerate(data):
+        score = float(record['symptom_score'])  # Convert to float for comparison
         if predictions[i] == -1:
-            # Customize this part to detect different anomalies
-            if record['symptom_score'] > 8:
+            if score > 8:
                 record['anomaly'] = 'High Risk Anomaly'
-            elif record['symptom_score'] < 2:
+            elif score < 2:
                 record['anomaly'] = 'Low Symptom Anomaly'
             else:
                 record['anomaly'] = 'Unusual Pattern'

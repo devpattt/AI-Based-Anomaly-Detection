@@ -78,39 +78,39 @@ if ($return_value === 0) {
     <title>Clinic Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .anomaly { background-color: #fdd; }
         .anomaly-high-risk { background-color: #fdd; }
         .anomaly-low-symptom { background-color: #dfd; }
         .anomaly-unusual-pattern { background-color: #ffd; }
-</style>
-
     </style>
 </head>
 <body>
     <h1>Clinic Dashboard</h1>
     <?php if (isset($anomalies)) : ?>
-    <h2>Anomaly Detection Results:</h2>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Patient ID</th>
-            <th>Symptom Score</th>
-            <th>Visit Date</th>
-            <th>Anomaly Type</th>
-        </tr>
-        <?php foreach ($anomalies as $record) : ?>
-            <tr class="<?= $record['anomaly'] != 'Normal' ? 'anomaly' : '' ?>">
-                <td><?= htmlspecialchars($record['id']) ?></td>
-                <td><?= htmlspecialchars($record['patient_id']) ?></td>
-                <td><?= htmlspecialchars($record['symptom_score']) ?></td>
-                <td><?= htmlspecialchars($record['visit_date']) ?></td>
-                <td><?= htmlspecialchars($record['anomaly']) ?></td>
+        <h2>Anomaly Detection Results:</h2>
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>Patient ID</th>
+                <th>Symptom Score</th>
+                <th>Visit Date</th>
+                <th>Anomaly Type</th>
             </tr>
-        <?php endforeach; ?>
-    </table>
-<?php else : ?>
-    <p>No anomaly data available.</p>
-<?php endif; ?>
-
+            <?php foreach ($anomalies as $record) : ?>
+                <tr class="<?php
+                    if ($record['anomaly'] == 'High Risk Anomaly') echo 'anomaly-high-risk';
+                    elseif ($record['anomaly'] == 'Low Symptom Anomaly') echo 'anomaly-low-symptom';
+                    elseif ($record['anomaly'] == 'Unusual Pattern') echo 'anomaly-unusual-pattern';
+                ?>">
+                    <td><?= htmlspecialchars($record['id']) ?></td>
+                    <td><?= htmlspecialchars($record['patient_id']) ?></td>
+                    <td><?= htmlspecialchars($record['symptom_score']) ?></td>
+                    <td><?= htmlspecialchars($record['visit_date']) ?></td>
+                    <td><?= htmlspecialchars($record['anomaly']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else : ?>
+        <p>No anomaly data available.</p>
+    <?php endif; ?>
 </body>
 </html>
